@@ -1,14 +1,16 @@
 package de.solugo.oidc.service
 
+import de.solugo.oidc.ServerProperties
+import de.solugo.oidc.util.uuid
 import org.jose4j.jws.JsonWebSignature
 import org.jose4j.jwt.JwtClaims
-import org.jose4j.jwt.NumericDate
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
 
 @Service
 class TokenService(
     private val jwksService: JwksService,
+    private val properties: ServerProperties,
 ) {
 
     fun createToken(
@@ -20,8 +22,10 @@ class TokenService(
         keyIdHeaderValue = webKey.keyId
         algorithmHeaderValue = webKey.algorithm
         payload = claims.run {
+            jwtId = uuid()
             issuer = issuerUri.toUriString()
-            issuedAt = NumericDate.now()
+            properties.claims.forEach { (key, value) -> setClaim(key, value) }
+            setIssuedAtToNow()
             toJson()
         }
         compactSerialization
