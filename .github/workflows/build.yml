@@ -1,0 +1,48 @@
+name: build
+
+on:
+  workflow_dispatch:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+    paths:
+      - '**'
+      - '!docs/**'
+      - '!README.md'
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  packages: write
+
+jobs:
+  version:
+    name: Calculate Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Calculate version
+        id: version
+        run: curl -Ls https://solugo.github.io/gitversion/run.sh | GITVERSION=v1.0.12 bash
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - version
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Build
+        run: ./gradlew jib -Djib.to.image=ghcr.io/${{ github.repository }} -Djib.to.tags=${{ needs.version.outputs.version }},latest -Djib.to.auth.username=${{ github.actor }} -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }} --no-daemon
