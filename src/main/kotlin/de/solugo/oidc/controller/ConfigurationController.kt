@@ -10,7 +10,7 @@ class ConfigurationController(
     private val configurationProviders: List<ConfigurationProvider>,
 ) {
 
-    @GetMapping(".well-known/oidc-configuration")
+    @GetMapping(".well-known/openid-configuration")
     fun configuration(builder: UriComponentsBuilder) = buildMap {
         put("issuer", builder.replacePath("/").toUriString())
         configurationProviders.forEach {
