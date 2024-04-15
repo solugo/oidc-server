@@ -5,7 +5,7 @@ import org.jose4j.jwk.RsaJwkGenerator
 import org.springframework.stereotype.Service
 
 @Service
-class JwksService {
+class KeySetService {
 
     val keys by lazy {
         listOf(

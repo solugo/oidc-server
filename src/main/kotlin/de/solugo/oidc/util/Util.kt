@@ -1,5 +1,9 @@
 package de.solugo.oidc.util
 
-import java.util.UUID
+import java.util.*
 
-fun uuid() = UUID.randomUUID().toString()
+fun uuid(value: String? = null) = when {
+    value != null -> UUID.nameUUIDFromBytes(value.toByteArray()).toString()
+    else -> UUID.randomUUID().toString()
+}
+

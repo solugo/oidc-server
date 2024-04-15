@@ -45,4 +45,4 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - name: Build
-        run: ./gradlew jib -Djib.to.image=ghcr.io/${{ github.repository }} -Djib.to.tags=${{ needs.version.outputs.version }},latest -Djib.to.auth.username=${{ github.actor }} -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }} --no-daemon
+        run: ./gradlew test jib -Djib.to.image=ghcr.io/${{ github.repository }} -Djib.to.tags=${{ needs.version.outputs.version }},latest -Djib.to.auth.username=${{ github.actor }} -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }} --no-daemon
