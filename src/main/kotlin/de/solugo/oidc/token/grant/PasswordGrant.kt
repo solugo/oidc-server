@@ -5,7 +5,6 @@ import de.solugo.oidc.token.TokenContext
 import de.solugo.oidc.token.TokenGrant
 import de.solugo.oidc.token.user
 import de.solugo.oidc.token.username
-import de.solugo.oidc.util.uuid
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,7 +15,7 @@ class PasswordGrant : TokenGrant {
         val username = context.username ?: return
 
         context.user = object : User {
-            override val id = uuid(value = username)
+            override val id = username
             override val username = username
         }
     }
