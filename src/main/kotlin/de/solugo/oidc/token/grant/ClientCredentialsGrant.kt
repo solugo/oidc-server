@@ -16,7 +16,7 @@ class ClientCredentialsGrant : TokenGrant {
         )
 
         context.user = object : User {
-            override val id = client.id
+            override val id = context.subject ?: uuid(client.id)
             override val username = client.id
         }
     }
