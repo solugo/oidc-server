@@ -28,7 +28,7 @@ val TokenContext.clientSecret: String?
     }
 val TokenContext.subject: String?
     get() = run {
-        parameters.getFirst("subject")
+        parameters.getFirst("sub")
     }
 val TokenContext.username: String?
     get() = run {
