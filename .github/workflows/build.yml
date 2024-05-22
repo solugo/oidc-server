@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
       - name: Calculate version
         id: version
-        run: curl -Ls https://solugo.github.io/gitversion/run.sh | GITVERSION=v1.0.12 bash
+        run: curl -Ls https://solugo.github.io/gitversion/run.sh | GITVERSION=v1.1.0 bash
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -38,9 +38,9 @@ jobs:
       VERSION: ${{ needs.version.outputs.version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
