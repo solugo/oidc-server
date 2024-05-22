@@ -32,7 +32,9 @@ abstract class IntegrationTest {
     companion object {
         @JvmStatic
         @DynamicPropertySource
+        @Suppress("unused")
         fun configure(registry: DynamicPropertyRegistry) {
+            registry.add("server.publicUrl") { "https://my_issuer" }
         }
     }
 

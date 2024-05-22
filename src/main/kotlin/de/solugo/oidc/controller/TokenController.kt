@@ -2,6 +2,7 @@ package de.solugo.oidc.controller
 
 
 import de.solugo.oidc.ConfigurationProvider
+import de.solugo.oidc.ServerProperties
 import de.solugo.oidc.service.TokenService
 import de.solugo.oidc.token.*
 import de.solugo.oidc.util.plus
@@ -23,13 +24,18 @@ class TokenController(
     private val grants: List<TokenGrant>,
     private val tokenService: TokenService,
     private val tokenProcessors: List<TokenProcessor>,
+    private val properties: ServerProperties,
 ) : ConfigurationProvider {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun provide(builder: UriComponentsBuilder) = mapOf(
-        "token_endpoint" to builder.replacePath("/token").toUriString(),
-    )
+    override fun provide(exchange: ServerWebExchange) = with(properties) {
+        mapOf(
+            "token_endpoint" to exchange.issuerUri {
+                replacePath("/token")
+            }
+        )
+    }
 
     @PostMapping("/token", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
     suspend fun createToken(

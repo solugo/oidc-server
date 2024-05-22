@@ -14,6 +14,17 @@ import org.junit.jupiter.api.Test
 class TokenControllerTest : IntegrationTest() {
 
     @Test
+    fun `Get openid configuration`() = runTest {
+        rest.get(".well-known/openid-configuration").apply {
+            status shouldBe HttpStatusCode.OK
+            body<ObjectNode>().apply {
+                at("/issuer").textValue() shouldBe "https://my_issuer/"
+            }
+        }
+    }
+
+
+    @Test
     fun `Create token using password grant`() = runTest {
         val parameters = parametersOf(
             "grant_type" to listOf("password"),
